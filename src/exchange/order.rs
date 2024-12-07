@@ -3,6 +3,7 @@ use crate::{
     helpers::{float_to_string_for_hashing, uuid_to_hex_string},
     prelude::*,
 };
+use ethers::signers::LocalWallet;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
@@ -15,8 +16,8 @@ pub struct Limit {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Trigger {
-    pub trigger_px: String,
     pub is_market: bool,
+    pub trigger_px: String,
     pub tpsl: String,
 }
 
@@ -51,9 +52,28 @@ pub struct ClientLimit {
 }
 
 pub struct ClientTrigger {
-    pub trigger_px: f64,
     pub is_market: bool,
+    pub trigger_px: f64,
     pub tpsl: String,
+}
+
+pub struct MarketOrderParams<'a> {
+    pub asset: &'a str,
+    pub is_buy: bool,
+    pub sz: f64,
+    pub px: Option<f64>,
+    pub slippage: Option<f64>,
+    pub cloid: Option<Uuid>,
+    pub wallet: Option<&'a LocalWallet>,
+}
+
+pub struct MarketCloseParams<'a> {
+    pub asset: &'a str,
+    pub sz: Option<f64>,
+    pub px: Option<f64>,
+    pub slippage: Option<f64>,
+    pub cloid: Option<Uuid>,
+    pub wallet: Option<&'a LocalWallet>,
 }
 
 pub enum ClientOrder {
